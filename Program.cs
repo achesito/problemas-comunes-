@@ -1,88 +1,84 @@
 ﻿using System;
 
-namespace ejercicioK
+namespace ConsoleApp2
 {
     class Program
     {
         /// <summary>
-        /// programa para obtener grados celsius a traves del medidor de grados farenheit de una empresa con un medidor en celsius descompuesto previamente, desplegando 
-        /// un color determinado segun el rango de temperatura(azul si es frio, verde si es normal, amarillo por precaución y rojo si hay que detener las maquinas) junto
-        /// a un mensaje que indique ese estado dependiendo del color tal como se detallo antes   
+        /// programa para obtener el total a cancelar de un producto el cual tiene distintas categorias,
+        /// siendo nuevo, abierto o usado, y se le debe aplicar un descuento a los nuevos dependiendo su departamento, y a los abiertos
+        /// y usados un descuento solamente por su condición
         /// </summary>
         /// <param name="args"></param>
+        const double ELECTRO = 0.05, ENSER = 0.07, MUEBLE = 0.1, ABIERTODES = 0.25, USADODES = 0.50;
         static void Main(string[] args)
         {
-            double gradosF, gradosC, resultado;
-            Console.WriteLine("laboratorio 1");
-            Console.WriteLine("inserte el numero de grados");
-            gradosF = leerDouble("gradosF");
-            if (gradosF>= 32)
-            {
-                resultado = gradosF - 32;
-                gradosC = resultado / 1.8;
+            //declaracion de variables de entrada 
+            string nom, departamento, condicion;
+            double precioOrigen, monto1;
+            Console.WriteLine("ingrese el nombre del producto");
+            nom = Console.ReadLine();
+            Console.WriteLine("ingrese el departamento del producto");
+            departamento = Console.ReadLine();
+            Console.WriteLine("inserte el precio original del producto");
+            precioOrigen = leerDouble("INGRESE EL VALOR");
+            Console.WriteLine("especifique la condicion del producto");
+            condicion = Console.ReadLine();
 
-                Console.WriteLine("la temperatura esta en {0:###0.00}C, tendencia: {1:###0.00}, estado: {2:####0}", gradosC, color(gradosC), mensaje(gradosC)) ;
+            if (precioOrigen > 0)
+            {
+                monto1 = precioOrigen - descuento(precioOrigen, condicion, departamento);
+                Console.WriteLine("el {0:####} correspondiente al departamento de {1:####} tiene un costo final de {2:###0.00}", nom, departamento, monto1);
             }
 
             else
             {
                 Console.WriteLine("datos invalidos");
             }
-
             Console.ReadKey();
         }
 
-        public static double leerDouble(string gradosF)
+        public static double leerDouble(string pene)
         {
             double valor;
+            Console.WriteLine(pene);
             valor = double.Parse(Console.ReadLine());
             return valor;
         }
 
-        public static string color(double gradosC)
+        public static double descuento(double precioOrigen, string condicion, string departamento)
         {
-            string tono;
-            tono = "'''''";
-            if (gradosC >= 0 && gradosC <= 15)
+            double resultado;
+            resultado = 0;
+            if (condicion == "nuevo")
             {
-                tono = "azul";
+                if (departamento == "electronicos")
+                {
+                    resultado = precioOrigen * ELECTRO;
+                }
+
+                if (departamento == "enseres")
+                {
+                    resultado = precioOrigen * ENSER;
+                }
+
+                if (departamento == "muebles")
+                {
+                    resultado = precioOrigen * MUEBLE;
+                }
             }
-            if (gradosC > 15 && gradosC <= 35)
+
+            if (condicion == "abierto")
             {
-                tono = "verde";
+                resultado = precioOrigen * ABIERTODES;
             }
-            if (gradosC > 35 && gradosC <= 45)
+
+            if (condicion == "usado")
             {
-                tono = "amarillo";
+                resultado = precioOrigen * USADODES;
             }
-            if (gradosC > 45)
-            {
-                tono = "rojo";
-            }
-            return tono; 
-        }
-        
-        public static string mensaje(double gradosC)
-        {
-            string respon;
-            respon = "'''";
-            if (gradosC >= 0 && gradosC <= 15)
-            {
-                respon = "frio";
-            }
-            if (gradosC > 15 && gradosC <= 35)
-            {
-                respon = "normal";
-            }
-            if (gradosC > 35 && gradosC <= 45)
-            {
-                respon = "precaucion";
-            }
-            if (gradosC > 45)
-            {
-                respon = "detener maquinas";
-            }
-            return respon;
+
+            return resultado;
         }
     }
 }
